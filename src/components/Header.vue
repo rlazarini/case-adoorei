@@ -1,6 +1,6 @@
 <template>
   <header class="bg-white">
-    <nav class="relative px-4 py-4 flex justify-start items-center bg-cyan-200">
+    <nav class="relative px-4 py-4 flex justify-start items-center bg-[#AEE2FF]">
       <div class="mr-1.5">
         <button
           class="navbar-burger flex items-center text-black p-2"
