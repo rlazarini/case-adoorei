@@ -134,22 +134,35 @@
       </nav>
     </div>
   </header>
+  CATEGORIAS!!!! {{ getCategories }}
 </template>
   
   <script>
-import { reactive } from "vue";
+import { reactive, computed, onMounted } from "vue";
+import { useStore } from "vuex";
+
 export default {
   props: {
     title: String,
   },
   setup(props) {
+    const store = useStore();
     const state = reactive({
       showMenu: true,
     });
-    function toggleMenu() {
+
+    const toggleMenu = () => {
       state.showMenu = !state.showMenu;
-    }
-    return { props, state, toggleMenu };
+    };
+    const getCategories = computed(() => {
+      return store.getters.getCategories;
+    });
+
+    onMounted(async () => {
+      await store.dispatch("fetchCategories");
+    });
+
+    return { props, state, getCategories, toggleMenu };
   },
 };
 </script>

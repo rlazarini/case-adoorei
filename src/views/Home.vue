@@ -2,6 +2,7 @@
   <div id="Home">
     <Header :title="title" />
     <Banner />
+    <Cards />
   </div>
 </template>
   
@@ -9,6 +10,7 @@
 import { defineComponent } from "vue";
 import Header from "@/components/Header.vue";
 import Banner from "@/components/Banner.vue";
+import Cards from "@/components/Cards.vue";
 
 export default defineComponent({
   methods: {},
@@ -16,6 +18,7 @@ export default defineComponent({
   components: {
     Header,
     Banner,
+    Cards,
   },
   props: {
     title: {

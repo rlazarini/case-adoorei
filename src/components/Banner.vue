@@ -29,9 +29,21 @@
           class="ml-8 w-auto h-full object-contain"
         >
         <div class="carousel-item__content w-4/12 mr-20 flex flex-col">
-          <h5 class="text-lg text-gray-200 drop-shadow-sm">{{ banner.title }}</h5>
-          <p class="text-xs text-gray-200 drop-shadow-sm">{{ banner.description }}</p>
-          <p class="text-lg mt-2 text-[#6EDCD9] place-self-end rounded-full bg-[#F900BF] px-4 py-2">{{ formatPrice(banner.price) }}</p>
+          <h5
+            :title=" banner.title"
+            class="text-lg text-gray-200 drop-shadow-sm line-clamp-2"
+          >
+            {{ banner.title }}
+          </h5>
+          <p
+            :title=" banner.description"
+            class="text-xs text-gray-200 drop-shadow-sm line-clamp-5"
+          >
+            {{ banner.description }}
+          </p>
+          <p class="text-base mt-2 text-white place-self-end rounded-full bg-[#F900BF] px-4 py-2">
+            {{ formatPrice(banner.price) }}
+          </p>
         </div>
       </div>
       <div class="carousel-bullets w-full absolute left-0 bottom-0 flex justify-center">
@@ -68,6 +80,7 @@ import { useStore } from "vuex";
 
 export default {
   setup() {
+    const store = useStore();
     const state = reactive({
       lang: navigator.language,
       bannerIndex: ref(0),
@@ -92,8 +105,6 @@ export default {
       }%`;
       state.bannerIndex = pos;
     };
-
-    const store = useStore();
 
     onMounted(async () => {
       await store.dispatch("fetchBanners");
