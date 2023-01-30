@@ -28,7 +28,7 @@
           alt=""
           class="ml-8 w-auto h-full object-contain"
         >
-        <div class="carousel-item__content w-4/12 mr-20 flex flex-col">
+        <div class="carousel-item__content w-4/12 h-full mr-20 flex flex-col pt-3">
           <h5
             :title=" banner.title"
             class="text-lg text-gray-200 drop-shadow-sm line-clamp-2"
@@ -41,7 +41,7 @@
           >
             {{ banner.description }}
           </p>
-          <p class="text-base mt-2 text-white place-self-end rounded-full bg-[#F900BF] px-4 py-2">
+          <p class="text-base mt-auto text-white place-self-end rounded-full bg-[#F900BF] px-4 py-2">
             {{ formatPrice(banner.price) }}
           </p>
         </div>

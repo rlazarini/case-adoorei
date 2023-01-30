@@ -1,4 +1,19 @@
 <template>
+  <h2
+    class="
+        block
+        p-4
+        w-full
+        text-3xl
+        font-bold
+        text-[#EFA3C8]
+        text-center
+        uppercase 
+      "
+    v-if="state.nameCategory"
+  >
+    {{ decodeURI(state.nameCategory) }}
+  </h2>
   <div
     ref="products"
     class="products relative p-5 box-content grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
@@ -59,6 +74,7 @@
             ease-in-out
             justify-self-end
           "
+          @click="addProductCart(product)"
         >
           Adicionar
         </button>
@@ -68,18 +84,25 @@
 </template>
       
   <script>
-import { reactive, onMounted, computed } from "vue";
+import { reactive, onMounted, watch, computed } from "vue";
 import { useStore } from "vuex";
 
 export default {
-  setup() {
+  props: {
+    category: String,
+  },
+  setup(props) {
+    const store = useStore();
     const state = reactive({
       lang: navigator.language,
+      nameCategory: props.category,
     });
 
     const getProducts = computed(() => {
       return store.getters.getProducts;
     });
+    const addProductCart = (product) =>
+      store.dispatch("addProductCart", product);
     const formatPrice = (price) => {
       return price.toLocaleString(state.lang, {
         style: "currency",
@@ -88,13 +111,28 @@ export default {
         maximumFractionDigits: 2,
       });
     };
-    const store = useStore();
 
+    watch(
+      () => props.category,
+      async (newCategory) => {
+        state.nameCategory = newCategory;
+        await store.dispatch("fetchProducts", {
+          category: `${newCategory ? "/category/" : ""}${newCategory}`,
+        });
+      }
+    );
     onMounted(async () => {
-      await store.dispatch("fetchProducts");
+      await store.dispatch("fetchProducts", {
+        category: `${props.category ? "/category/" : ""}${props.category}`,
+      });
     });
 
-    return { state, getProducts, formatPrice };
+    return {
+      state,
+      getProducts,
+      addProductCart,
+      formatPrice,
+    };
   },
 };
 </script>

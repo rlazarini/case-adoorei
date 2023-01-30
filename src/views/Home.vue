@@ -1,14 +1,12 @@
 <template>
   <div id="Home">
-    <Header :title="title" />
     <Banner />
-    <Cards />
+    <Cards category="" />
   </div>
 </template>
   
   <script>
 import { defineComponent } from "vue";
-import Header from "@/components/Header.vue";
 import Banner from "@/components/Banner.vue";
 import Cards from "@/components/Cards.vue";
 
@@ -16,15 +14,8 @@ export default defineComponent({
   methods: {},
   name: "Home",
   components: {
-    Header,
     Banner,
     Cards,
-  },
-  props: {
-    title: {
-      type: String,
-      required: true,
-    },
   },
 });
 </script>

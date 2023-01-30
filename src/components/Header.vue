@@ -1,6 +1,6 @@
 <template>
   <header class="bg-white">
-    <nav class="relative px-4 py-4 flex justify-start items-center bg-[#AEE2FF]">
+    <nav class="relative p-4 flex justify-start items-center bg-[#AEE2FF]">
       <div class="mr-1.5">
         <button
           class="navbar-burger flex items-center text-black p-2"
@@ -15,17 +15,19 @@
           </svg>
         </button>
       </div>
-      <a
+      <router-link
         class="text-3xl font-bold leading-none flex items-center"
-        href="#"
+        :to="{
+            name: 'Home'
+        }"
       >
         <img
-          src="cart-logo.png"
+          src="/cart-logo.png"
           alt="E-commerce Template"
           class="h-10"
         >
         <h1 class="text-xl text-gray-500">{{ title }}</h1>
-      </a>
+      </router-link>
       <form class="ml-auto mr-6 w-1/2 mt-1">
         <div class="relative">
           <input
@@ -62,8 +64,9 @@
         title="Sacola de compras"
         href="#"
       >
+        x
         <img
-          src="checkout.png"
+          src="/checkout.png"
           alt="Sacola"
           class="h-10"
         >
@@ -99,42 +102,37 @@
         </div>
         <div>
           <ul>
-            <li class="mb-1">
-              <a
-                class="block p-4 text-sm font-semibold text-gray-400 hover:bg-blue-50 hover:text-blue-600 rounded"
-                href="#"
-              >Home</a>
-            </li>
-            <li class="mb-1">
-              <a
-                class="block p-4 text-sm font-semibold text-gray-400 hover:bg-blue-50 hover:text-blue-600 rounded"
-                href="#"
-              >About Us</a>
-            </li>
-            <li class="mb-1">
-              <a
-                class="block p-4 text-sm font-semibold text-gray-400 hover:bg-blue-50 hover:text-blue-600 rounded"
-                href="#"
-              >Services</a>
-            </li>
-            <li class="mb-1">
-              <a
-                class="block p-4 text-sm font-semibold text-gray-400 hover:bg-blue-50 hover:text-blue-600 rounded"
-                href="#"
-              >Pricing</a>
-            </li>
-            <li class="mb-1">
-              <a
-                class="block p-4 text-sm font-semibold text-gray-400 hover:bg-blue-50 hover:text-blue-600 rounded"
-                href="#"
-              >Contact</a>
+            <li
+              class="mb-1"
+              v-for="(category, index) in getCategories"
+              :key="index"
+            >
+              <router-link
+                class="
+                    block
+                    p-4
+                    text-sm
+                    font-semibold
+                    text-gray-400
+                    capitalize 
+                    hover:bg-blue-50
+                    hover:text-blue-600
+                    rounded
+                "
+                :to="{
+                    name: 'Category',
+                    params: {
+                        id: encodeURI(category)
+                    }
+                }"
+                @click="toggleMenu"
+              >{{ category }}</router-link>
             </li>
           </ul>
         </div>
       </nav>
     </div>
   </header>
-  CATEGORIAS!!!! {{ getCategories }}
 </template>
   
   <script>
