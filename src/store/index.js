@@ -7,12 +7,14 @@ export default createStore({
     state: {
         banners: [],
         products: [],
-        categories: []
+        categories: [],
+        cart: []
     },
     getters: {
         getBanners: (state) => state.banners,
         getProducts: (state) => state.products,
-        getCategories: (state) => state.categories
+        getCategories: (state) => state.categories,
+        getCart: (state) => state.cart
     },
     actions: {
         async fetchBanners({ commit }) {
@@ -25,10 +27,12 @@ export default createStore({
                 console.log(error);
             }
         },
-        async fetchProducts({ commit }) {
+        async fetchProducts({ state, commit }, {category}) {
+            state.products = []
+            const categoryOption = category
             try {
                 const data = await axios.get(
-                    `${hostName}/products`
+                    `${hostName}/products${categoryOption}`
                 );
                 commit("SET_PRODUCTS", data.data);
             } catch (error) {
@@ -45,6 +49,9 @@ export default createStore({
                 console.log(error);
             }
         },
+        addProductCart({state, commit}, product) {
+            console.log(product, state, commit)
+        }
     },
     mutations: {
         SET_BANNERS(state, banners) {
