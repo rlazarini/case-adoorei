@@ -1,6 +1,6 @@
 <template>
   <Header title='E-commerce template' />
-  <main>
+  <main class="pt-20">
     <router-view />
   </main>
   <Footer />
@@ -21,7 +21,13 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-main {
-  min-height: calc(100vh - 142px);
+#app {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  justify-content: flex-start;
+  footer {
+    margin-top: auto;
+  }
 }
 </style>

@@ -23,37 +23,51 @@
       v-for="(product, index) in getProducts"
       :key="index"
     >
-      <a
-        href="#!"
+      <router-link
         class="grid"
+        :to="{
+            name: 'Product',
+            params: {
+                id: product.id
+            }
+        }"
       >
         <img
           class="rounded-t-lg h-[130px] justify-self-center pt-4"
           :src="product.image"
           alt=""
         />
-      </a>
+      </router-link>
       <div class="p-6 grid">
-        <h5 class="text-gray-400 text-xs text-right mb-2 mt-3">{{ product.category }}</h5>
-        <h4 class="text-gray-900 text-xl font-medium mb-2 line-clamp-2 h-14">
-          {{ product.title }}
-        </h4>
-        <p class="text-gray-700 text-base mb-4 line-clamp-3 h-18">
-          {{product.description}}
-        </p>
-        <p
-          :class="{'text-green-600 font-semibold' : product.rating.rate >= 4.7}"
-          class="text-gray-700 text-base mb-4"
+        <router-link
+          class="grid"
+          :to="{
+            name: 'Product',
+            params: {
+                id: product.id
+            }
+        }"
         >
-          {{ formatPrice((product.price)) }}
-        </p>
+          <h5 class="text-gray-400 text-xs text-right mb-2 mt-3">{{ product.category }}</h5>
+          <h4 class="text-gray-900 text-xl font-medium mb-2 line-clamp-2 h-14">
+            {{ product.title }}
+          </h4>
+          <p class="text-gray-700 text-base mb-4 line-clamp-3 h-18">
+            {{product.description}}
+          </p>
+          <p
+            :class="{'text-green-600 font-semibold' : product.rating.rate >= 4.7}"
+            class="text-gray-700 text-base mb-4"
+          >
+            {{ formatPrice((product.price)) }}
+          </p>
+        </router-link>
         <button
           type="button"
           class="
             inline-block
             px-6
             py-2.5
-            bg-blue-600
             text-white
             font-medium
             text-xs
@@ -61,9 +75,7 @@
             uppercase
             rounded
             shadow-md
-            hover:bg-blue-700
             hover:shadow-lg
-            focus:bg-blue-700
             focus:shadow-lg
             focus:outline-none
             focus:ring-0
@@ -74,16 +86,21 @@
             ease-in-out
             justify-self-end
           "
-          @click="addProductCart(product)"
+          :class="(
+            cart.includes(product.id) ?
+              'bg-red-600 hover:bg-red-700 focus:bg-red-700' :
+              'bg-blue-600 hover:bg-blue-700 focus:bg-blue-700'
+          )"
+          @click="productCart({...product, ...{quantity: 1}}, (cart.includes(product.id) ? 'remove' : 'add'))"
         >
-          Adicionar
+          {{ (cart.includes(product.id) ? 'Remover' : 'Adicionar') }}
         </button>
       </div>
     </div>
   </div>
 </template>
       
-  <script>
+<script>
 import { reactive, onMounted, watch, computed } from "vue";
 import { useStore } from "vuex";
 
@@ -101,8 +118,12 @@ export default {
     const getProducts = computed(() => {
       return store.getters.getProducts;
     });
-    const addProductCart = (product) =>
-      store.dispatch("addProductCart", product);
+    const productCart = (product, action) => {
+      if (action === "add") store.dispatch("addProductCart", product);
+      if (action === "remove") store.dispatch("removeProductCart", product);
+    };
+    const cart = computed(() => store.getters.getCart.map((e) => e.id));
+
     const formatPrice = (price) => {
       return price.toLocaleString(state.lang, {
         style: "currency",
@@ -129,13 +150,11 @@ export default {
 
     return {
       state,
+      cart,
       getProducts,
-      addProductCart,
+      productCart,
       formatPrice,
     };
   },
 };
 </script>
-  
-  <style scoped lang="scss">
-</style>
