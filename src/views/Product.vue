@@ -71,7 +71,10 @@
           {{ getProduct.description }}
         </p>
       </div>
-      <div class="product-description__actions flex justify-end mt-auto">
+      <div class="product-description__actions flex justify-end mt-auto mb-4">
+        <span class="font-bold text-xl">{{ formatPrice(getProduct.price) }}</span>
+      </div>
+      <div class="product-description__actions flex justify-end">
         <div class="
             product-description__actions-select
             flex
