@@ -85,11 +85,14 @@
             "
           v-if="cart.length"
         >
-          {{ cart.map(e => e.quantity || 1).reduce((a,b) => a + b) }}
+          {{ cart.map(e => e.quantity || 1).reduce((a,b) => a + b, 0) }}
         </span>
 
         <div class="absolute w-full hidden group-hover:block rounded-b border-t-0 z-10 right-0 w-auto bg-whtie z-50">
-          <div class="shadow-xl w-72 rounded-lg bg-white">
+          <div
+            class="shadow-xl w-72 rounded-lg bg-white"
+            v-if="cart.length > 0"
+          >
             <div
               class="p-2 flex bg-white hover:bg-gray-100 cursor-pointer border-b border-gray-100"
               v-for="(item, index) in cart"
@@ -171,6 +174,14 @@
               >
                 Comprar {{ formatPrice(state.price) }}
               </button>
+            </div>
+          </div>
+          <div
+            class="shadow-xl w-72 rounded-lg bg-white"
+            v-else
+          >
+            <div class="p-2 flex flex-col bg-transparent min-h-[200px] place-content-center">
+              <p class="text-center text-base text-gray-500 font-light">Seu carrinho está vazio</p>
             </div>
           </div>
         </div>
@@ -258,7 +269,7 @@ export default {
       const cartObj = store.getters.getCart;
       state.price = cartObj
         .map((e) => e.price * (e.quantity || 1))
-        .reduce((a, b) => a + b);
+        .reduce((a, b) => a + b, 0);
       return cartObj;
     });
     const removeProductCart = (product) => {
