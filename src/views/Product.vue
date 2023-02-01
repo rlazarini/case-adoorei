@@ -72,7 +72,7 @@
         </p>
       </div>
       <div class="product-description__actions flex justify-end mt-auto mb-4">
-        <span class="font-bold text-xl">{{ formatPrice(getProduct.price) }}</span>
+        <span class="font-bold text-xl">{{ formatPrice(getProduct.price || 0) }}</span>
       </div>
       <div class="product-description__actions flex justify-end">
         <div class="

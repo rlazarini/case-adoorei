@@ -15,6 +15,52 @@
     {{ decodeURI(state.nameCategory) }}
   </h2>
   <div
+    class="
+      order-cards
+      flex
+      justify-end
+      p-5
+    "
+    v-if="state.nameCategory"
+  >
+    <div class="inline-block relative w-auto">
+      <select
+        class="
+          block
+          appearance-none
+          w-full
+          bg-white
+          border
+          border-gray-400
+          hover:border-gray-500
+          px-4
+          py-2
+          pr-8
+          rounded
+          shadow
+          leading-tight
+          focus:outline-none
+          focus:shadow-outline
+        "
+        @change="orderProducts(e)"
+        v-model="state.selectedValue"
+      >
+        <option value="title">Nome</option>
+        <option value="price">Preço</option>
+        <option value="rating.rate">Avaliações</option>
+      </select>
+      <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+        <svg
+          class="fill-current h-4 w-4"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 20 20"
+        >
+          <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+        </svg>
+      </div>
+    </div>
+  </div>
+  <div
     ref="products"
     class="products relative p-5 box-content grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
   >
@@ -101,7 +147,7 @@
 </template>
       
 <script>
-import { reactive, onMounted, watch, computed } from "vue";
+import { ref, reactive, onMounted, watch, computed } from "vue";
 import { useStore } from "vuex";
 
 export default {
@@ -113,16 +159,37 @@ export default {
     const state = reactive({
       lang: navigator.language,
       nameCategory: props.category,
+      products: ref([]),
+      selectedValue: ref(null),
     });
 
     const getProducts = computed(() => {
-      return store.getters.getProducts;
+      state.products = store.getters.getProducts;
+      return state.products;
     });
     const productCart = (product, action) => {
       if (action === "add") store.dispatch("addProductCart", product);
       if (action === "remove") store.dispatch("removeProductCart", product);
     };
     const cart = computed(() => store.getters.getCart.map((e) => e.id));
+    const orderProducts = () => {
+      const orderName = state.selectedValue
+        .split(".")
+        .map((e) => new Array(e))[0];
+      if (orderName[0] === "rating") {
+        state.products = state.products.sort((a, b) =>
+          a[orderName]["rate"] > b[orderName]["rate"]
+            ? -1
+            : b[orderName]["rate"] > a[orderName]["rate"]
+            ? 1
+            : 0
+        );
+      } else {
+        state.products = state.products.sort((a, b) =>
+          a[orderName] > b[orderName] ? 1 : b[orderName] > a[orderName] ? -1 : 0
+        );
+      }
+    };
 
     const formatPrice = (price) => {
       return price.toLocaleString(state.lang, {
@@ -152,6 +219,7 @@ export default {
       state,
       cart,
       getProducts,
+      orderProducts,
       productCart,
       formatPrice,
     };
