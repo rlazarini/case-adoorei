@@ -18,17 +18,19 @@
     class="
       order-cards
       flex
+      w-full
       justify-end
       p-5
     "
     v-if="state.nameCategory"
   >
-    <div class="inline-block relative w-auto">
+    <div class="inline-block relative w-full flex flex-row justify-end">
+      <span class="block w-28 self-center">ordernar por: </span>
       <select
         class="
           block
           appearance-none
-          w-full
+          w-36
           bg-white
           border
           border-gray-400
@@ -160,7 +162,7 @@ export default {
       lang: navigator.language,
       nameCategory: props.category,
       products: ref([]),
-      selectedValue: ref(null),
+      selectedValue: ref("title"),
     });
 
     const getProducts = computed(() => {
