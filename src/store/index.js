@@ -66,7 +66,7 @@ export default createStore({
                 console.log(error);
             }
         },
-        
+
         addProductCart({state, commit}, product) {
             commit('pushProductCart', product);
         },
@@ -88,8 +88,12 @@ export default createStore({
             state.categories = categories;
         },
         pushProductCart(state, product) {
-            if (state.cart.findIndex(pdt => pdt.id === product.id) < 0)
+            const index = state.cart.findIndex(pdt => pdt.id === product.id)
+            if (index < 0) {
                 state.cart.push(product);
+            } else {
+                state.cart[index].quantity = product.quantity || 1
+            }
         },
         popProductCart(state, product) {
             const index = state.cart.findIndex(pdt => pdt.id === product.id)
